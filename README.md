@@ -1,6 +1,4 @@
-# CodeU_6
-
-Assignment 6 - Rearranging cars
+### Assignment 6 - Rearranging cars
 There is a parking lot with N spaces and N-1 cars in it. Your task is to write an algorithm to rearrange the cars in a given way. Only one car can be moved at a time to the empty slot.
 
 The parking lot is described by an array of numbers. Let's identify cars with numbers from 1 to N-1, and the number 0 means an empty parking space.
