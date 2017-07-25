@@ -16,7 +16,7 @@ public class Parking {
 	 *            - The target order of the cars in the parking
 	 */
 	public void printReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
-		List<Move> moves = reorderMoves(initialOrder, targetOrder);
+		List<Move> moves = getReorderMoves(initialOrder, targetOrder);
 		for (Move move : moves) {
 			System.out.println(move.toString());
 		}
@@ -34,7 +34,7 @@ public class Parking {
 	 * @return - The moves that have to be done in order to reach the target
 	 *         parking order
 	 */
-	public List<Move> reorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
+	public List<Move> getReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
 		// Make copy of the initial order array
 		List<Integer> initialOrderCopy = new ArrayList<>(initialOrder);
 		// Mapping element -> initial position
@@ -81,7 +81,7 @@ public class Parking {
 	 *         are generated (one to free the target spot, the other one to
 	 *         place the car on the target spot).
 	 */
-	public List<Move> generateMoves(int currentPos, int targetPos, int emptySpot) {
+	private List<Move> generateMoves(int currentPos, int targetPos, int emptySpot) {
 		List<Move> moves = new ArrayList<Move>();
 
 		if (targetPos != emptySpot) {
@@ -98,7 +98,7 @@ public class Parking {
 	 *            - the array to convert in element -> index style
 	 * @return - element -> index array
 	 */
-	public List<Integer> elementMapPosition(List<Integer> array) {
+	private List<Integer> elementMapPosition(List<Integer> array) {
 		List<Integer> list = new ArrayList<Integer>(Collections.nCopies(array.size(), 0));
 
 		for (int i = 0; i < array.size(); i++) {

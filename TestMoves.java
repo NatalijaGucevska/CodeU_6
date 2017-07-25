@@ -19,7 +19,7 @@ public class TestMoves {
 	public void testEmptyParking() {
 		List<Move> moves = new ArrayList<>();
 		List<Integer> empty = Arrays.asList(new Integer[] { 0 }); 
-		assertEquals(moves, parking.reorderMoves(empty, empty));
+		assertEquals(moves, parking.getReorderMoves(empty, empty));
 	}
 
 	@Test
@@ -27,7 +27,7 @@ public class TestMoves {
 		List<Move> moves = new ArrayList<>();
 		List<Integer> sameArray = Arrays.asList(new Integer[] { 0, 1, 2 }); 
 
-		assertEquals(moves, parking.reorderMoves(sameArray, sameArray));
+		assertEquals(moves, parking.getReorderMoves(sameArray, sameArray));
 	}
 
 	@Test
@@ -40,7 +40,7 @@ public class TestMoves {
 		}	
 		Collections.shuffle(initialOrder);
 		Collections.shuffle(finalOrder);
-		List<Move> moves = parking.reorderMoves(initialOrder, finalOrder); 
+		List<Move> moves = parking.getReorderMoves(initialOrder, finalOrder); 
 		assertTrue(isValidSolution(initialOrder, finalOrder, moves)); 
 	}
 	

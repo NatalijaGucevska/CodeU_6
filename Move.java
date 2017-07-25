@@ -17,15 +17,6 @@ public class Move {
 	}
 
 	@Override
-	public boolean equals(Object that) {
-		if (!(that instanceof Move)) {
-			return false;
-		}
-		return this.getInitialPosition() == ((Move) that).getInitialPosition()
-				&& this.getMovePosition() == ((Move) that).getMovePosition();
-	}
-
-	@Override
 	public String toString() {
 		return String.format("Moved from %d to %d", getInitialPosition(), getMovePosition());
 	}
