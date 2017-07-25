@@ -11,6 +11,7 @@ public class Parking {
 		if (parkingPlaces <= 0) {
 			throw new IllegalArgumentException("The number of parking places must be a positive natural number!");
 		}
+		
 		this.parkingPlaces = parkingPlaces;
 	}
 
@@ -25,25 +26,25 @@ public class Parking {
 	 */
 	public List<Move> reorderMoves(int[] initialOrder, int[] targetOrder) {
 		// Mapping element -> initial position
-		Map<Integer, Integer> initial = elementMapPosition(initialOrder);
+		int[] initial = elementMapPosition(initialOrder);
 
 		List<Move> moves = new ArrayList<>();
 		for (int i = 0; i < initialOrder.length; i++) {
 			int shouldBeHere = targetOrder[i];
-			int itsCurrentPosition = initial.get(shouldBeHere);
+			int itsCurrentPosition = initial[shouldBeHere];
 			int currentlyOnThatPosition = initialOrder[i];
-			int emptyPlace = initial.get(0);
+			int emptyPlace = initial[0];
 			if (i != itsCurrentPosition) {
 				moves.addAll(move(i, itsCurrentPosition, emptyPlace));
 				// Put the car from the target position on empty spot
 				initialOrder[emptyPlace] = currentlyOnThatPosition;
-				initial.replace(currentlyOnThatPosition, emptyPlace);
+				initial[currentlyOnThatPosition] = emptyPlace;
 				// Put the target car on the target position
 				initialOrder[i] = shouldBeHere;
-				initial.replace(shouldBeHere, i);
+				initial[shouldBeHere] = i;
 				// The current position of the target car remains empty
 				initialOrder[itsCurrentPosition] = 0;
-				initial.replace(0, itsCurrentPosition);
+				initial[0] = itsCurrentPosition;
 
 			}
 		}
@@ -81,12 +82,13 @@ public class Parking {
 	 *            - the array to convert in element -> index style
 	 * @return - element -> index map
 	 */
-	public Map<Integer, Integer> elementMapPosition(int[] array) {
-		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+	public int[] elementMapPosition(int[] array) {
+		int[] map = new int[array.length];
 
 		for (int i = 0; i < array.length; i++) {
-			map.put(array[i], i);
+			map[array[i]]=i;
 		}
+		
 		return map;
 	}
 }
