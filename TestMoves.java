@@ -1,122 +1,78 @@
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
+import org.junit.Before;
 import org.junit.Test;
 
 public class TestMoves {
-	int validParkingSize = 25;
+	Parking parking;
 
-	/********** Test create invalid parking ****************/
-	@Test(expected = IllegalArgumentException.class)
-	public void testCreateParkingWithNegativeNoSpots() {
-		new Parking(-5);
-	}
-
-	/********** Tests for valid parking , helper methods ********************/
-	@Test
-	public void testCreateValidParking() {
-		new Parking(validParkingSize);
+	@Before
+	public void setup() {
+		parking = new Parking();
 	}
 
 	@Test
-	public void testMoveCarFreePlace() {
-		Parking parking = new Parking(validParkingSize);
-		List<Move> expectedMoves = new ArrayList<Move>();
-		expectedMoves.add(new Move(0, 5));
-		assertEquals(expectedMoves, parking.move(5, 0, 5));
-	}
-
-	@Test
-	public void testMoveCarNoNeedToMove() {
-		Parking parking = new Parking(validParkingSize);
-		List<Move> expectedMoves = new ArrayList<Move>();
-
-		assertEquals(expectedMoves, parking.move(5, 5, 0));
-	}
-
-	@Test
-	public void testMoveCarWithTwoMoves() {
-		Parking parking = new Parking(validParkingSize);
-		List<Move> expectedMoves = new ArrayList<Move>();
-		expectedMoves.add(new Move(5, 2));
-		expectedMoves.add(new Move(3, 5));
-
-		assertEquals(expectedMoves, parking.move(5, 3, 2));
-	}
-
-	@Test
-	public void testCreateElementMapPosition() {
-		Parking parking = new Parking(validParkingSize);
-		Map<Integer, Integer> map = new HashMap<>();
-		map.put(2, 0);
-		map.put(1, 1);
-		map.put(3, 2);
-		map.put(0, 3);
-
-		assertEquals(map, parking.elementMapPosition(new int[] { 2, 1, 3, 0 }));
-	}
-
-	/********** Tests for valid parking ********************/
-	// Test from assignment example
-	@Test
-	public void testFindCorrectMoves() {
-		Parking parking = new Parking(4);
-
-		int[] initialOrder = new int[] { 1, 2, 0, 3 };
-		int[] targetOrder = new int[] { 3, 1, 2, 0 };
-
+	public void testEmptyParking() {
 		List<Move> moves = new ArrayList<>();
-		moves.add(new Move(0, 2));
-		moves.add(new Move(3, 0));
-		moves.add(new Move(1, 3));
-		moves.add(new Move(2, 1));
-		moves.add(new Move(3, 2));
-
-		assertEquals(moves, parking.reorderMoves(initialOrder, targetOrder));
-
+		List<Integer> empty = Arrays.asList(new Integer[] { 0 }); 
+		assertEquals(moves, parking.reorderMoves(empty, empty));
 	}
 
 	@Test
-	public void testFindOneMove() {
-		Parking parking = new Parking(11);
-
-		int[] initialOrder = new int[] { 1, 2, 0, 3, 4, 5, 6, 7, 8, 9, 10 };
-		int[] targetOrder = new int[] { 1, 2, 5, 3, 4, 0, 6, 7, 8, 9, 10 };
-
+	public void testIdenticalInitialAndFinalOrder() {
 		List<Move> moves = new ArrayList<>();
-		moves.add(new Move(5, 2));
+		List<Integer> sameArray = Arrays.asList(new Integer[] { 0, 1, 2 }); 
 
-		assertEquals(moves, parking.reorderMoves(initialOrder, targetOrder));
+		assertEquals(moves, parking.reorderMoves(sameArray, sameArray));
 	}
 
 	@Test
-	public void testNoMovesOnEmptyParking() {
-		Parking parking = new Parking(11);
-
-		int[] initialOrder = new int[] { 0 };
-		int[] targetOrder = new int[] { 0 };
-
-		List<Move> moves = new ArrayList<>();
-
-		assertEquals(moves, parking.reorderMoves(initialOrder, targetOrder));
-
+	public void testRearrangementMoves() {
+		List<Integer> initialOrder = new ArrayList<>(1000); 
+		List<Integer> finalOrder = new ArrayList<>(1000);
+		for(int i=0; i<1000; i++) {
+			initialOrder.add(i); 
+			finalOrder.add(i); 
+		}	
+		Collections.shuffle(initialOrder);
+		Collections.shuffle(finalOrder);
+		List<Move> moves = parking.reorderMoves(initialOrder, finalOrder); 
+		assertTrue(isValidSolution(initialOrder, finalOrder, moves)); 
 	}
-
-	@Test
-	public void testForInvalidMoves() {
-		Parking parking = new Parking(15);
-
-		int[] initialOrder = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 };
-		int[] targetOrder = new int[] { 14, 1, 3, 2, 0, 5, 6, 7, 8, 9, 11, 12, 10, 13, 4 };
-		List<Move> moves = parking.reorderMoves(initialOrder, targetOrder); 
 	
-		for(Move m: moves) {
-			assertThat(m.getInitialPosition(), not(equalTo(m.getMovePosition()))); 		
+	
+
+	/**
+	 * Given initial order of parking, target order and a list of moves to be
+	 * done to generate the target order from initial order: return ``false`` if
+	 * some of the generated moves is invalid (i.e. generating move for staying
+	 * on the same position, for example Move(5,5), moving nothing or moving to
+	 * taken position) and return ``true`` if the moves are valid and they
+	 * generate the desired target order.
+	 */
+	private boolean isValidSolution(List<Integer> initialOrder, List<Integer> finalOrder, List<Move> moves) {
+		List<Integer> initialOrderCopy = new ArrayList<>(initialOrder);
+
+		for (Move move : moves) {
+			// Make sure that there is no move from and to the same position
+			if (move.getInitialPosition() == move.getMovePosition()) {
+				return false;
+			}
+			// Moving "nothing" is invalid move
+			if (initialOrderCopy.get(move.getInitialPosition()) == 0) {
+				return false;
+			}
+			// Moving to taken position is invalid move
+			if (initialOrderCopy.get(move.getMovePosition()) != 0) {
+				return false;
+			}
+			Collections.swap(initialOrderCopy, move.getInitialPosition(), move.getMovePosition());
 		}
+
+		return initialOrderCopy.equals(finalOrder);
 	}
 }
