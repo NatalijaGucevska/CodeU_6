@@ -102,7 +102,7 @@ public class Parking {
 		List<Integer> list = new ArrayList<Integer>(Collections.nCopies(array.size(), 0));
 
 		for (int i = 0; i < array.size(); i++) {
-			list.add(array.get(i), i);
+			list.set(array.get(i), i);
 		}
 
 		return list;
