@@ -12,7 +12,6 @@ public class Parking {
 			throw new IllegalArgumentException("The number of parking places must be a positive natural number!");
 		}
 		this.parkingPlaces = parkingPlaces;
-		Move.setParkingSize(parkingPlaces);
 	}
 
 	/**
