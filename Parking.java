@@ -1,50 +1,61 @@
+import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Parking {
 
-	int parkingPlaces = 0;
-
-	public Parking(int parkingPlaces) {
-		if (parkingPlaces <= 0) {
-			throw new IllegalArgumentException("The number of parking places must be a positive natural number!");
-		}
-		
-		this.parkingPlaces = parkingPlaces;
-	}
-
 	/**
+	 * Given the initial order of cars in the parking and a target order, it it
+	 * prints the Moves to be done in order to arrive from the initial to the
+	 * target ordering of the cars.
 	 * 
 	 * @param initialOrder
 	 *            - The initial order of the cars in the parking
 	 * @param targetOrder
 	 *            - The target order of the cars in the parking
-	 * @return - The moves that have to be done in order to reach the tarket
+	 */
+	public void printReorderMoves(int[] initialOrder, int[] targetOrder) {
+		List<Move> moves = reorderMoves(initialOrder, targetOrder);
+		for (Move move : moves) {
+			System.out.println(move.toString());
+		}
+	}
+
+	/**
+	 * Given the initial order of cars in the parking and a target order, it
+	 * generates a list of Moves to be done in order to arrive from the initial
+	 * to the target ordering of the cars.
+	 * 
+	 * @param initialOrder
+	 *            - The initial order of the cars in the parking
+	 * @param targetOrder
+	 *            - The target order of the cars in the parking
+	 * @return - The moves that have to be done in order to reach the target
 	 *         parking order
 	 */
 	public List<Move> reorderMoves(int[] initialOrder, int[] targetOrder) {
+		// Make copy of the initial order array
+		int[] initialOrderCopy = Arrays.copyOf(initialOrder, initialOrder.length);
 		// Mapping element -> initial position
-		int[] initial = elementMapPosition(initialOrder);
+		int[] initial = elementMapPosition(initialOrderCopy);
 
 		List<Move> moves = new ArrayList<>();
-		for (int i = 0; i < initialOrder.length; i++) {
-			int shouldBeHere = targetOrder[i];
-			int itsCurrentPosition = initial[shouldBeHere];
-			int currentlyOnThatPosition = initialOrder[i];
-			int emptyPlace = initial[0];
-			if (i != itsCurrentPosition) {
-				moves.addAll(move(i, itsCurrentPosition, emptyPlace));
+		for (int i = 0; i < initialOrderCopy.length; i++) {
+			int targetCar = targetOrder[i];
+			int targetCarCurrPos = initial[targetCar];
+			int currentlyOnTargetPos = initialOrderCopy[i];
+			int emptySpot = initial[0];
+			if (i != targetCarCurrPos && targetCar != 0) {
+				moves.addAll(generateMoves(targetCarCurrPos, i, emptySpot));
 				// Put the car from the target position on empty spot
-				initialOrder[emptyPlace] = currentlyOnThatPosition;
-				initial[currentlyOnThatPosition] = emptyPlace;
+				initialOrderCopy[emptySpot] = currentlyOnTargetPos;
+				initial[currentlyOnTargetPos] = emptySpot;
 				// Put the target car on the target position
-				initialOrder[i] = shouldBeHere;
-				initial[shouldBeHere] = i;
+				initialOrderCopy[i] = targetCar;
+				initial[targetCar] = i;
 				// The current position of the target car remains empty
-				initialOrder[itsCurrentPosition] = 0;
-				initial[0] = itsCurrentPosition;
+				initialOrderCopy[targetCarCurrPos] = 0;
+				initial[0] = targetCarCurrPos;
 
 			}
 		}
@@ -52,27 +63,27 @@ public class Parking {
 	}
 
 	/**
+	 * Given it's current position, it's target position and an empty spot, this
+	 * method generates a minimal number of moves needed for a car to be placed
+	 * on it's target position.
 	 * 
 	 * @param from
 	 *            - The current position of the car
 	 * @param to
 	 *            - The target position of the car
-	 * @param emptyPlace
-	 *            - The free slot to be used for temporary transition
-	 * @return - List of 2 moves to be done to move the car to it's correct
-	 *         position
+	 * @param emptySpot
+	 *            - The free slot to be used for transition
+	 * @return - List of at most 2 moves to be done in order to move the car to
+	 *         it's target position
 	 */
-	public List<Move> move(int from, int to, int emptyPlace) {
+	public List<Move> generateMoves(int from, int to, int emptySpot) {
 		List<Move> moves = new ArrayList<Move>();
 
-		if (from != to) {
-			if (from != emptyPlace) {
-				moves.add(new Move(from, emptyPlace));
-			}
-			if (to != emptyPlace) {
-				moves.add(new Move(to, from));
-			}
+		if (to != emptySpot) {
+			moves.add(new Move(to, emptySpot));
 		}
+		moves.add(new Move(from, to));
+
 		return moves;
 	}
 
@@ -80,15 +91,15 @@ public class Parking {
 	 * 
 	 * @param array
 	 *            - the array to convert in element -> index style
-	 * @return - element -> index map
+	 * @return - element -> index array
 	 */
 	public int[] elementMapPosition(int[] array) {
 		int[] map = new int[array.length];
 
 		for (int i = 0; i < array.length; i++) {
-			map[array[i]]=i;
+			map[array[i]] = i;
 		}
-		
+
 		return map;
 	}
 }
