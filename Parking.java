@@ -1,7 +1,7 @@
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Parking {
 
@@ -35,76 +35,46 @@ public class Parking {
 	 *         parking order
 	 */
 	public List<Move> getReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
-		// Make copy of the initial order array
-		List<Integer> initialOrderCopy = new ArrayList<>(initialOrder);
 		// Mapping element -> initial position
-		List<Integer> initial = elementMapPosition(initialOrderCopy);
+		Map<Integer, Integer> misplacedElementIndexMap = elementMapPosition(initialOrder, targetOrder);
 
 		List<Move> moves = new ArrayList<>();
-		for (int targetPos = 0; targetPos < initialOrderCopy.size(); targetPos++) {
-			int targetCar = targetOrder.get(targetPos);
-			int targetCarCurrPos = initial.get(targetCar);
-			int currentlyOnTargetPos = initialOrderCopy.get(targetPos);
-			int emptySpot = initial.get(0);
-
-			if (targetPos != targetCarCurrPos && targetCar != 0) {
-				moves.addAll(generateMoves(targetCarCurrPos, targetPos, emptySpot));
-				// Put the car from the target position on empty spot
-				initialOrderCopy.set(emptySpot, currentlyOnTargetPos);
-				initial.set(currentlyOnTargetPos, emptySpot);
-				// Put the target car on the target position
-				initialOrderCopy.set(targetPos, targetCar);
-				initial.set(targetCar, targetPos);
-				// The current position of the target car remains empty
-				initialOrderCopy.set(targetCarCurrPos, 0);
-				initial.set(0, targetCarCurrPos);
-
+		while (misplacedElementIndexMap.size() > 1 && !misplacedElementIndexMap.isEmpty()) {
+			int emptySpot = misplacedElementIndexMap.get(0);
+			int targetCar = targetOrder.get(emptySpot);
+			int currentPos = misplacedElementIndexMap.get(targetCar);
+			misplacedElementIndexMap.remove(0);
+			if (targetCar == 0) {
+				currentPos = misplacedElementIndexMap.get(misplacedElementIndexMap.keySet().iterator().next());
+				targetCar = initialOrder.get(currentPos);
+				misplacedElementIndexMap.put(targetCar, emptySpot);
+			} else {
+				misplacedElementIndexMap.remove(targetCar);
 			}
+			misplacedElementIndexMap.put(0, currentPos);
+			moves.add(new Move(currentPos, emptySpot));
 		}
 		return moves;
 	}
 
 	/**
-	 * Given it's current position, it's target position and an empty spot, this
-	 * method generates a minimal number of moves needed for a car to be placed
-	 * on it's target position.
-	 * 
-	 * @param currentPos
-	 *            - The current position of the car
-	 * @param targetPos
-	 *            - The target position of the car
-	 * @param emptySpot
-	 *            - The free slot to be used for transition
-	 * @return - List of at most 2 moves to be done in order to move the car to
-	 *         it's target position. If the target position of the car is an
-	 *         empty spot then only one Move is generated. Otherwise two moves
-	 *         are generated (one to free the target spot, the other one to
-	 *         place the car on the target spot).
-	 */
-	private List<Move> generateMoves(int currentPos, int targetPos, int emptySpot) {
-		List<Move> moves = new ArrayList<Move>();
-
-		if (targetPos != emptySpot) {
-			moves.add(new Move(targetPos, emptySpot));
-		}
-		moves.add(new Move(currentPos, targetPos));
-
-		return moves;
-	}
-
-	/**
+	 * Creates element -> index mapping between the misplaced
+	 * elements. The mapping contains also element->index mapping 
+	 * for the empty spot, regardless of the fact if it is on it's correct position 
+	 * or not. 
 	 * 
 	 * @param array
 	 *            - the array to convert in element -> index style
 	 * @return - element -> index array
 	 */
-	private List<Integer> elementMapPosition(List<Integer> array) {
-		List<Integer> list = new ArrayList<Integer>(Collections.nCopies(array.size(), 0));
+	private Map<Integer, Integer> elementMapPosition(List<Integer> initialOrder, List<Integer> targetOrder) {
+		Map<Integer, Integer> map = new HashMap<>();
 
-		for (int i = 0; i < array.size(); i++) {
-			list.set(array.get(i), i);
+		for (int i = 0; i < initialOrder.size(); i++) {
+			if (initialOrder.get(i) != targetOrder.get(i) || initialOrder.get(i) == 0) {
+				map.put(initialOrder.get(i), i);
+			}
 		}
-
-		return list;
+		return map;
 	}
 }
