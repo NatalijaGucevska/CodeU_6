@@ -41,7 +41,7 @@ public class Parking {
 		Map<Integer, Integer> misplacedElementIndexMap = getMisplacedElementIndexMap(initialOrder, targetOrder);
 
 		List<Move> moves = new ArrayList<>();
-		while (misplacedElementIndexMap.size() > 1 && !misplacedElementIndexMap.isEmpty()) {
+		while (misplacedElementIndexMap.size() > 1) {
 			int emptySpotPos = misplacedElementIndexMap.get(EMPTY_SPOT);
 			int targetCar = targetOrder.get(emptySpotPos);
 			int currentPos = misplacedElementIndexMap.get(targetCar);
