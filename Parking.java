@@ -61,9 +61,10 @@ public class Parking {
 	}
 
 	/**
-	 * Creates car -> position mapping between the misplaced elements. The
-	 * mapping contains also element->index mapping for the empty spot,
-	 * regardless of the fact if it is on it's correct position or not.
+	 * Creates car -> position mapping between the misplaced elements and their
+	 * position. The mapping contains also element -> position mapping for the
+	 * empty spot, regardless of the fact if it is on it's correct position or
+	 * not.
 	 * 
 	 * @param initialOrder
 	 *            - The initial order of the cars in the parking
