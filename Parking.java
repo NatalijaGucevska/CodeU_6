@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Parking {
-	
-	private final static int EMPTY_SPOT = 0; 
+
+	private final static int EMPTY_SPOT = 0;
 
 	/**
 	 * Given the initial order of cars in the parking and a target order, it it
@@ -37,15 +37,15 @@ public class Parking {
 	 *         parking order
 	 */
 	public List<Move> getReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
-		// Mapping element -> initial position
 		Map<Integer, Integer> misplacedElementIndexMap = getMisplacedElementIndexMap(initialOrder, targetOrder);
-
 		List<Move> moves = new ArrayList<>();
+		
 		while (misplacedElementIndexMap.size() > 1) {
 			int emptySpotPos = misplacedElementIndexMap.get(EMPTY_SPOT);
 			int targetCar = targetOrder.get(emptySpotPos);
 			int currentPos = misplacedElementIndexMap.get(targetCar);
 			misplacedElementIndexMap.remove(EMPTY_SPOT);
+			
 			if (targetCar == EMPTY_SPOT) {
 				currentPos = misplacedElementIndexMap.get(misplacedElementIndexMap.keySet().iterator().next());
 				targetCar = initialOrder.get(currentPos);
@@ -53,6 +53,7 @@ public class Parking {
 			} else {
 				misplacedElementIndexMap.remove(targetCar);
 			}
+			
 			misplacedElementIndexMap.put(EMPTY_SPOT, currentPos);
 			moves.add(new Move(currentPos, emptySpotPos));
 		}
@@ -60,13 +61,14 @@ public class Parking {
 	}
 
 	/**
-	 * Creates element -> index mapping between the misplaced
-	 * elements. The mapping contains also element->index mapping 
-	 * for the empty spot, regardless of the fact if it is on it's correct position 
-	 * or not. 
+	 * Creates element -> index mapping between the misplaced elements. The
+	 * mapping contains also element->index mapping for the empty spot,
+	 * regardless of the fact if it is on it's correct position or not.
 	 * 
-	 * @param array
-	 *            - the array to convert in element -> index style
+	 * @param initialOrder
+	 *            - The initial order of the cars in the parking
+	 * @param targetOrder
+	 *            - The target order of the cars in the parking
 	 * @return - element -> index array
 	 */
 	private Map<Integer, Integer> getMisplacedElementIndexMap(List<Integer> initialOrder, List<Integer> targetOrder) {
