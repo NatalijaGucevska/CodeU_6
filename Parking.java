@@ -38,23 +38,23 @@ public class Parking {
 	 */
 	public List<Move> getReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
 		// Mapping element -> initial position
-		Map<Integer, Integer> misplacedElementIndexMap = elementMapPosition(initialOrder, targetOrder);
+		Map<Integer, Integer> misplacedElementIndexMap = getMisplacedElementIndexMap(initialOrder, targetOrder);
 
 		List<Move> moves = new ArrayList<>();
 		while (misplacedElementIndexMap.size() > 1 && !misplacedElementIndexMap.isEmpty()) {
-			int emptySpot = misplacedElementIndexMap.get(EMPTY_SPOT);
-			int targetCar = targetOrder.get(emptySpot);
+			int emptySpotPos = misplacedElementIndexMap.get(EMPTY_SPOT);
+			int targetCar = targetOrder.get(emptySpotPos);
 			int currentPos = misplacedElementIndexMap.get(targetCar);
 			misplacedElementIndexMap.remove(EMPTY_SPOT);
 			if (targetCar == EMPTY_SPOT) {
 				currentPos = misplacedElementIndexMap.get(misplacedElementIndexMap.keySet().iterator().next());
 				targetCar = initialOrder.get(currentPos);
-				misplacedElementIndexMap.put(targetCar, emptySpot);
+				misplacedElementIndexMap.put(targetCar, emptySpotPos);
 			} else {
 				misplacedElementIndexMap.remove(targetCar);
 			}
 			misplacedElementIndexMap.put(EMPTY_SPOT, currentPos);
-			moves.add(new Move(currentPos, emptySpot));
+			moves.add(new Move(currentPos, emptySpotPos));
 		}
 		return moves;
 	}
@@ -69,7 +69,7 @@ public class Parking {
 	 *            - the array to convert in element -> index style
 	 * @return - element -> index array
 	 */
-	private Map<Integer, Integer> elementMapPosition(List<Integer> initialOrder, List<Integer> targetOrder) {
+	private Map<Integer, Integer> getMisplacedElementIndexMap(List<Integer> initialOrder, List<Integer> targetOrder) {
 		Map<Integer, Integer> map = new HashMap<>();
 
 		for (int i = 0; i < initialOrder.size(); i++) {
