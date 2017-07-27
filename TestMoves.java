@@ -67,7 +67,7 @@ public class TestMoves {
 
 		for (Move move : moves) {
 			// Make sure that there is no move from and to the same position
-			if (move.getInitialPosition() == move.getMovePosition()) {
+			if (move.getInitialPosition() == move.getFinalPosition()) {
 				return false;
 			}
 			// Moving "nothing" is invalid move
@@ -75,10 +75,10 @@ public class TestMoves {
 				return false;
 			}
 			// Moving to taken position is invalid move
-			if (initialOrderCopy.get(move.getMovePosition()) != 0) {
+			if (initialOrderCopy.get(move.getFinalPosition()) != 0) {
 				return false;
 			}
-			Collections.swap(initialOrderCopy, move.getInitialPosition(), move.getMovePosition());
+			Collections.swap(initialOrderCopy, move.getInitialPosition(), move.getFinalPosition());
 		}
 
 		return initialOrderCopy.equals(finalOrder);

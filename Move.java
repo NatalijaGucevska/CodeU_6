@@ -12,12 +12,12 @@ public class Move {
 		return from;
 	}
 
-	public int getMovePosition() {
+	public int getFinalPosition() {
 		return to;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Moved from %d to %d", getInitialPosition(), getMovePosition());
+		return String.format("Moved from %d to %d", getInitialPosition(), getFinalPosition());
 	}
 }
