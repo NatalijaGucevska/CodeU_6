@@ -17,7 +17,7 @@ public class Parking {
 	 * @param targetOrder
 	 *            - The target order of the cars in the parking
 	 */
-	public void printReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
+	public void printReorderMoves(int[] initialOrder, int[] targetOrder) {
 		List<Move> moves = getReorderMoves(initialOrder, targetOrder);
 		for (Move move : moves) {
 			System.out.println(move.toString());
@@ -36,13 +36,13 @@ public class Parking {
 	 * @return - The moves that have to be done in order to reach the target
 	 *         parking order
 	 */
-	public List<Move> getReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
+	public List<Move> getReorderMoves(int[] initialOrder, int[] targetOrder) {
 		Map<Integer, Integer> misplacedCarPositionMap = getMisplacedCarPositionMap(initialOrder, targetOrder);
 		List<Move> moves = new ArrayList<>();
 
 		while (misplacedCarPositionMap.size() > 1) {
 			int emptySpotPos = misplacedCarPositionMap.get(EMPTY_SPOT);
-			int targetCar = targetOrder.get(emptySpotPos);
+			int targetCar = targetOrder[emptySpotPos];
 			int currentPos = misplacedCarPositionMap.get(targetCar);
 			misplacedCarPositionMap.remove(EMPTY_SPOT);
 
@@ -71,12 +71,12 @@ public class Parking {
 	 *            - The target order of the cars in the parking
 	 * @return - car -> position map
 	 */
-	private Map<Integer, Integer> getMisplacedCarPositionMap(List<Integer> initialOrder, List<Integer> targetOrder) {
+	private Map<Integer, Integer> getMisplacedCarPositionMap(int[] initialOrder, int[] targetOrder) {
 		Map<Integer, Integer> map = new HashMap<>();
 
-		for (int i = 0; i < initialOrder.size(); i++) {
-			if (initialOrder.get(i) != targetOrder.get(i) || initialOrder.get(i) == EMPTY_SPOT) {
-				map.put(initialOrder.get(i), i);
+		for (int i = 0; i < initialOrder.length; i++) {
+			if (initialOrder[i] != targetOrder[i] || initialOrder[i] == EMPTY_SPOT) {
+				map.put(initialOrder[i], i);
 			}
 		}
 		return map;
