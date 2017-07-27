@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +28,6 @@ public class TestMoves {
 	public void testIdenticalInitialAndFinalOrder() {
 		List<Move> moves = new ArrayList<>();
 		int[] sameArray = new int[] { 0, 1, 2 };
-
 		assertEquals(moves, parking.getReorderMoves(sameArray, sameArray));
 	}
 
@@ -34,30 +35,30 @@ public class TestMoves {
 	public void testEmptySpotOnTargetPositionAtBeginning() {
 		int[] initialOrder = new int[] { 0, 1, 2, 3 };
 		int[] finalOrder = new int[] { 0, 2, 1, 3 };
-
 		List<Move> moves = parking.getReorderMoves(initialOrder, finalOrder);
-		//I'm not sure how to convert initialOrder and finalOrder to Lists 
-		//assertTrue(isValidSolution(initialOrder, finalOrder, moves));
+
+		List<Integer> initialOrderList = Arrays.stream(initialOrder).boxed().collect(Collectors.toList());
+		List<Integer> finalOrderList = Arrays.stream(finalOrder).boxed().collect(Collectors.toList());
+		assertTrue(isValidSolution(initialOrderList, finalOrderList, moves));
 	}
 
 	@Test
 	public void testRearrangementMoves() {
-		List<Integer> initialOrder = new ArrayList<>(1000);
-		List<Integer> finalOrder = new ArrayList<>(1000);
+		List<Integer> initialOrderList = new ArrayList<>(1000);
+		List<Integer> finalOrderList = new ArrayList<>(1000);
 		for (int i = 0; i < 1000; i++) {
-			initialOrder.add(i);
-			finalOrder.add(i);
+			initialOrderList.add(i);
+			finalOrderList.add(i);
 		}
-		
-		Collections.shuffle(initialOrder);
-		Collections.shuffle(finalOrder);
-		
-		int[] array1 = initialOrder.stream().mapToInt(i->i).toArray();
-		int[] array2 = finalOrder.stream().mapToInt(i->i).toArray();
 
-		List<Move> moves = parking.getReorderMoves(array1, array2);
+		Collections.shuffle(initialOrderList);
+		Collections.shuffle(finalOrderList);
 
-		assertTrue(isValidSolution(initialOrder, finalOrder, moves));
+		int[] initialOrder = initialOrderList.stream().mapToInt(i -> i).toArray();
+		int[] finalOrder = finalOrderList.stream().mapToInt(i -> i).toArray();
+		List<Move> moves = parking.getReorderMoves(initialOrder, finalOrder);
+
+		assertTrue(isValidSolution(initialOrderList, finalOrderList, moves));
 	}
 
 	/**
@@ -86,7 +87,6 @@ public class TestMoves {
 			}
 			Collections.swap(initialOrderCopy, move.getInitialPosition(), move.getFinalPosition());
 		}
-
 		return initialOrderCopy.equals(finalOrder);
 	}
 }
