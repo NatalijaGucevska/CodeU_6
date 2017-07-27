@@ -20,8 +20,8 @@ Input: initial array and target array.
      a) Get the position of the empty spot (0) from the mapping (created in Step 1), and store as "emptySpotPos".  
      b) Get the car number which is parked in the position "emptySpotPos" of the target array, and store as "targetCar".  
      c) Get the position of the "targetCar" in the initial array, and store as "currentPos".  
-     d) Remove empty spot (0) from the mapping. Go to Step 2g.  
-     e) If "targetCar" == 0, then choose any position from the mapping of the misplaced elements, and update the "targetCar" and "currentPos" accordingly. Add [targetCar -> emptySpotPos] to the mapping of the misplaced elements.  
+     d) Remove empty spot (0) from the mapping.    
+     e) If "targetCar" == 0, then choose any position from the mapping of the misplaced elements, and update the "targetCar" and "currentPos" accordingly. Add [targetCar -> emptySpotPos] to the mapping of the misplaced elements. Go to Step 2g.  
      f) Otherwise, the "targetCar" is put in its correct position, and hence remove "targetCar" from the mapping.  
      g) To update the new position of the empty spot in the mapping, add [0 -> currentPos] to the mapping.  
      h) Print: move from currentPos to emptySpotPos.  
