@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Parking {
+	
+	private final static int EMPTY_SPOT = 0; 
 
 	/**
 	 * Given the initial order of cars in the parking and a target order, it it
@@ -40,18 +42,18 @@ public class Parking {
 
 		List<Move> moves = new ArrayList<>();
 		while (misplacedElementIndexMap.size() > 1 && !misplacedElementIndexMap.isEmpty()) {
-			int emptySpot = misplacedElementIndexMap.get(0);
+			int emptySpot = misplacedElementIndexMap.get(EMPTY_SPOT);
 			int targetCar = targetOrder.get(emptySpot);
 			int currentPos = misplacedElementIndexMap.get(targetCar);
-			misplacedElementIndexMap.remove(0);
-			if (targetCar == 0) {
+			misplacedElementIndexMap.remove(EMPTY_SPOT);
+			if (targetCar == EMPTY_SPOT) {
 				currentPos = misplacedElementIndexMap.get(misplacedElementIndexMap.keySet().iterator().next());
 				targetCar = initialOrder.get(currentPos);
 				misplacedElementIndexMap.put(targetCar, emptySpot);
 			} else {
 				misplacedElementIndexMap.remove(targetCar);
 			}
-			misplacedElementIndexMap.put(0, currentPos);
+			misplacedElementIndexMap.put(EMPTY_SPOT, currentPos);
 			moves.add(new Move(currentPos, emptySpot));
 		}
 		return moves;
@@ -71,7 +73,7 @@ public class Parking {
 		Map<Integer, Integer> map = new HashMap<>();
 
 		for (int i = 0; i < initialOrder.size(); i++) {
-			if (initialOrder.get(i) != targetOrder.get(i) || initialOrder.get(i) == 0) {
+			if (initialOrder.get(i) != targetOrder.get(i) || initialOrder.get(i) == EMPTY_SPOT) {
 				map.put(initialOrder.get(i), i);
 			}
 		}
