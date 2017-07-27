@@ -39,19 +39,28 @@ public class Parking {
 	public List<Move> getReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
 		Map<Integer, Integer> misplacedElementIndexMap = getMisplacedElementIndexMap(initialOrder, targetOrder);
 		List<Move> moves = new ArrayList<>();
-		
 		while (misplacedElementIndexMap.size() > 1) {
 			int emptySpotPos = misplacedElementIndexMap.get(EMPTY_SPOT);
 			int targetCar = targetOrder.get(emptySpotPos);
 			int currentPos = misplacedElementIndexMap.get(targetCar);
 			misplacedElementIndexMap.remove(EMPTY_SPOT);
-			
+			misplacedElementIndexMap.remove(targetCar);
+
+			//Can happen only at the beginning at the reordering
 			if (targetCar == EMPTY_SPOT) {
 				currentPos = misplacedElementIndexMap.get(misplacedElementIndexMap.keySet().iterator().next());
 				targetCar = initialOrder.get(currentPos);
 				misplacedElementIndexMap.put(targetCar, emptySpotPos);
-			} else {
-				misplacedElementIndexMap.remove(targetCar);
+			} 
+			//Allow the empty spot to be on it's target position only at the end of the reordering
+			else if (targetOrder.get(currentPos) == EMPTY_SPOT && misplacedElementIndexMap.size() > 1){
+				int initialTargetCar = targetCar; 
+				int initialCurrentPos = currentPos;
+				misplacedElementIndexMap.remove(initialTargetCar);
+				currentPos = misplacedElementIndexMap.get(misplacedElementIndexMap.keySet().iterator().next());
+				targetCar = initialOrder.get(currentPos);
+				misplacedElementIndexMap.put(targetCar, emptySpotPos);
+				misplacedElementIndexMap.put(initialTargetCar, initialCurrentPos); 
 			}
 			
 			misplacedElementIndexMap.put(EMPTY_SPOT, currentPos);
@@ -73,7 +82,6 @@ public class Parking {
 	 */
 	private Map<Integer, Integer> getMisplacedElementIndexMap(List<Integer> initialOrder, List<Integer> targetOrder) {
 		Map<Integer, Integer> map = new HashMap<>();
-
 		for (int i = 0; i < initialOrder.size(); i++) {
 			if (initialOrder.get(i) != targetOrder.get(i) || initialOrder.get(i) == EMPTY_SPOT) {
 				map.put(initialOrder.get(i), i);
