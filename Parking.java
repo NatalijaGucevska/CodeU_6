@@ -37,31 +37,31 @@ public class Parking {
 	 *         parking order
 	 */
 	public List<Move> getReorderMoves(List<Integer> initialOrder, List<Integer> targetOrder) {
-		Map<Integer, Integer> misplacedElementIndexMap = getMisplacedElementIndexMap(initialOrder, targetOrder);
+		Map<Integer, Integer> misplacedCarPositionMap = getMisplacedCarPositionMap(initialOrder, targetOrder);
 		List<Move> moves = new ArrayList<>();
-		
-		while (misplacedElementIndexMap.size() > 1) {
-			int emptySpotPos = misplacedElementIndexMap.get(EMPTY_SPOT);
+
+		while (misplacedCarPositionMap.size() > 1) {
+			int emptySpotPos = misplacedCarPositionMap.get(EMPTY_SPOT);
 			int targetCar = targetOrder.get(emptySpotPos);
-			int currentPos = misplacedElementIndexMap.get(targetCar);
-			misplacedElementIndexMap.remove(EMPTY_SPOT);
-			
+			int currentPos = misplacedCarPositionMap.get(targetCar);
+			misplacedCarPositionMap.remove(EMPTY_SPOT);
+
 			if (targetCar == EMPTY_SPOT) {
-				currentPos = misplacedElementIndexMap.get(misplacedElementIndexMap.keySet().iterator().next());
+				currentPos = misplacedCarPositionMap.get(misplacedCarPositionMap.keySet().iterator().next());
 				targetCar = initialOrder.get(currentPos);
-				misplacedElementIndexMap.put(targetCar, emptySpotPos);
+				misplacedCarPositionMap.put(targetCar, emptySpotPos);
 			} else {
-				misplacedElementIndexMap.remove(targetCar);
+				misplacedCarPositionMap.remove(targetCar);
 			}
-			
-			misplacedElementIndexMap.put(EMPTY_SPOT, currentPos);
+
+			misplacedCarPositionMap.put(EMPTY_SPOT, currentPos);
 			moves.add(new Move(currentPos, emptySpotPos));
 		}
 		return moves;
 	}
 
 	/**
-	 * Creates element -> index mapping between the misplaced elements. The
+	 * Creates car -> position mapping between the misplaced elements. The
 	 * mapping contains also element->index mapping for the empty spot,
 	 * regardless of the fact if it is on it's correct position or not.
 	 * 
@@ -69,9 +69,9 @@ public class Parking {
 	 *            - The initial order of the cars in the parking
 	 * @param targetOrder
 	 *            - The target order of the cars in the parking
-	 * @return - element -> index array
+	 * @return - car -> position map
 	 */
-	private Map<Integer, Integer> getMisplacedElementIndexMap(List<Integer> initialOrder, List<Integer> targetOrder) {
+	private Map<Integer, Integer> getMisplacedCarPositionMap(List<Integer> initialOrder, List<Integer> targetOrder) {
 		Map<Integer, Integer> map = new HashMap<>();
 
 		for (int i = 0; i < initialOrder.size(); i++) {
