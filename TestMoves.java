@@ -82,7 +82,6 @@ public class TestMoves {
 	 */
 	private boolean isValidSolution(int[] initialOrder, int[] finalOrder, List<Move> moves) {
 		List<Integer> initialOrderList = arrayToList(initialOrder);
-		System.out.println(initialOrderList);
 		List<Integer> finalOrderList = arrayToList(finalOrder);
 
 		for (Move move : moves) {

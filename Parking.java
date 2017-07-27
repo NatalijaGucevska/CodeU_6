@@ -20,7 +20,7 @@ public class Parking {
 	public void printReorderMoves(int[] initialOrder, int[] targetOrder) {
 		List<Move> moves = getReorderMoves(initialOrder, targetOrder);
 		for (Move move : moves) {
-			System.out.println(move.toString());
+			System.out.println(move);
 		}
 	}
 
