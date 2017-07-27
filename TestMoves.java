@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestMoves {
-	Parking parking;
+	private Parking parking;
 
 	@Before
 	public void setup() {
@@ -18,33 +18,41 @@ public class TestMoves {
 	@Test
 	public void testEmptyParking() {
 		List<Move> moves = new ArrayList<>();
-		List<Integer> empty = Arrays.asList(new Integer[] { 0 }); 
+		List<Integer> empty = Arrays.asList(new Integer[] { 0 });
 		assertEquals(moves, parking.getReorderMoves(empty, empty));
 	}
 
 	@Test
 	public void testIdenticalInitialAndFinalOrder() {
 		List<Move> moves = new ArrayList<>();
-		List<Integer> sameArray = Arrays.asList(new Integer[] { 0, 1, 2 }); 
+		List<Integer> sameArray = Arrays.asList(new Integer[] { 0, 1, 2 });
 
 		assertEquals(moves, parking.getReorderMoves(sameArray, sameArray));
 	}
 
 	@Test
+	public void testEmptySpotOnTargetPositionAtBeginning() {
+		List<Integer> initialOrder = Arrays.asList(new Integer[] { 0, 1, 2, 3 });
+		List<Integer> finalOrder = Arrays.asList(new Integer[] { 0, 2, 1, 3 });
+
+		List<Move> moves = parking.getReorderMoves(initialOrder, finalOrder);
+		assertTrue(isValidSolution(initialOrder, finalOrder, moves));
+	}
+
+	@Test
 	public void testRearrangementMoves() {
-		List<Integer> initialOrder = new ArrayList<>(1000); 
+		List<Integer> initialOrder = new ArrayList<>(1000);
 		List<Integer> finalOrder = new ArrayList<>(1000);
-		for(int i=0; i<1000; i++) {
-			initialOrder.add(i); 
-			finalOrder.add(i); 
-		}	
+		for (int i = 0; i < 1000; i++) {
+			initialOrder.add(i);
+			finalOrder.add(i);
+		}
 		Collections.shuffle(initialOrder);
 		Collections.shuffle(finalOrder);
-		List<Move> moves = parking.getReorderMoves(initialOrder, finalOrder); 
-		assertTrue(isValidSolution(initialOrder, finalOrder, moves)); 
+		List<Move> moves = parking.getReorderMoves(initialOrder, finalOrder);
+
+		assertTrue(isValidSolution(initialOrder, finalOrder, moves));
 	}
-	
-	
 
 	/**
 	 * Given initial order of parking, target order and a list of moves to be
