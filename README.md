@@ -19,6 +19,11 @@ Input: initial array and target array.
      e) If "targetCar" == 0, then, choose any position from the mapping of the misplaced elements, and also update the "targetCar" and "currentPos" accordingly. Add [targetCar -> emptySpotPos] to the mapping of the misplaced elements. Go to Step 2g.  
      f) Otherwise, "emptySpotPos" is the correct position of the "targetCar", and hence remove "targetCar" from the mapping.  
      g) To update the new position of the empty spot in the mapping, add [0 -> currentPos] to the mapping.  
-     h) Print: move from "currentPos" to "emptySpotPos".  
+     h) Add a new Move to the sequence of moves from "currentPos" to "emptySpotPos".  
      
+ 
+ ## Complexity: 
+ - Space complexity: O(N).
+ - Time complexity: O(N).
+ 
 
