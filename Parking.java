@@ -47,8 +47,8 @@ public class Parking {
 			misplacedCarPositionMap.remove(EMPTY_SPOT);
 
 			if (targetCar == EMPTY_SPOT) {
-				currentPos = misplacedCarPositionMap.get(misplacedCarPositionMap.keySet().iterator().next());
-				targetCar = initialOrder.get(currentPos);
+				targetCar = misplacedCarPositionMap.keySet().iterator().next();
+				currentPos = misplacedCarPositionMap.get(targetCar);
 				misplacedCarPositionMap.put(targetCar, emptySpotPos);
 			} else {
 				misplacedCarPositionMap.remove(targetCar);
