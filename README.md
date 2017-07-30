@@ -15,11 +15,10 @@ Input: initial array and target array.
      a) Get the position of the empty spot (0) from the mapping (created in Step 1), and store as "emptySpotPos".  
      b) Get the car number which should be parked on the position "emptySpotPos" from the target array, and store as "targetCar".
      c) Get the position of the "targetCar" in the initial array, and store as "currentPos".  
-     d) Remove empty spot (0) from the mapping.    
-     e) If "targetCar" == 0, then, choose any position from the mapping of the misplaced elements, and also update the "targetCar" and "currentPos" accordingly. Add [targetCar -> emptySpotPos] to the mapping of the misplaced elements. Go to Step 2g.  
-     f) Otherwise, "emptySpotPos" is the correct position of the "targetCar", and hence remove "targetCar" from the mapping.  
-     g) To update the new position of the empty spot in the mapping, add [0 -> currentPos] to the mapping.  
-     h) Add a new Move to the sequence of moves from "currentPos" to "emptySpotPos".  
+     d) Remove targetCar from the mapping.    
+     e) If "targetCar" == 0, then, choose any position from the mapping of the misplaced elements, and also update the "targetCar" and "currentPos" accordingly. Add [targetCar -> emptySpotPos] to the mapping of the misplaced elements.  
+     f) To update the new position of the empty spot in the mapping, add [0 -> currentPos] to the mapping.  
+     g) Add a new Move to the sequence of moves from "currentPos" to "emptySpotPos".  
      
  
  ## Complexity: 
